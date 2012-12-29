@@ -27,6 +27,37 @@ __global__ void matrixMultiply(double * N, double * M, double * P, int size) {
     }
 }
 
+__global__ void matrixMultiplyShared(double * A, double * B, double * C,
+                                     int size) {
+    //@@ Insert code to implement matrix multiplication here
+    //@@ You have to use shared memory for this MP
+    __shared__ double s_A[BLOCKSIZE][BLOCKSIZE];
+    __shared__ double s_B[BLOCKSIZE][BLOCKSIZE];
+
+    int bx = blockIdx.x;
+    int by = blockIdx.y;
+    int tx = threadIdx.x;
+    int ty = threadIdx.y;
+
+    int row = by * BLOCKSIZE + ty;
+    int col = bx * BLOCKSIZE + tx;
+
+    double Cvalue = 0;
+
+    for(int m = 0; m < size / BLOCKSIZE; m++) {
+        s_A[ty][tx] = A[row * size + m * BLOCKSIZE + tx];
+        s_B[ty][tx] = B[(m * BLOCKSIZE + ty) * size + col];
+
+        __syncthreads();
+
+        for(int k = 0; k < BLOCKSIZE; k++)
+            Cvalue += s_A[ty][k] * s_B[k][tx];
+
+        __syncthreads();
+
+    }
+    C[row * size + col] = Cvalue;
+}
 
 int main() {
     struct timeval start, end;
@@ -58,7 +89,8 @@ int main() {
 
     gettimeofday(&start, NULL);
 
-    matrixMultiply<<<dimGrid,dimBlock>>>(d_N, d_M, d_P, SIZE);
+    //matrixMultiply<<<dimGrid,dimBlock>>>(d_N, d_M, d_P, SIZE);
+    matrixMultiplyShared<<<dimGrid,dimBlock>>>(d_N, d_M, d_P, SIZE);
 
     cudaError_t cudaResult = cudaGetLastError();
     if (cudaResult != cudaSuccess) {
