@@ -8,7 +8,7 @@
 #define wbCheck(stmt) do {                                 \
         cudaError_t err = stmt;                            \
         if (err != cudaSuccess) {                          \
-            wbLog(ERROR, "Failed to run stmt ", #stmt);    \
+            printf("Failed to run stmt %s", #stmt);    \
             return -1;                                     \
         }                                                  \
     } while(0)
@@ -21,7 +21,7 @@ __global__ void matrixMultiply(double * N, double * M, double * P, int size) {
     if ((row < size) && (col < size)) {
         double sum = 0;
         for(int k = 0; k < size; k++) {
-            sum += A[row * size + k] * B[k * size + col];
+            sum += N[row * size + k] * M[k * size + col];
         }
         P[row * size + col] = sum;
     }
@@ -31,15 +31,15 @@ __global__ void matrixMultiply(double * N, double * M, double * P, int size) {
 int main() {
     struct timeval start, end;
 
-    double *h_N = malloc(SIZE * SIZE * sizeof(double));
-    double *h_M = malloc(SIZE * SIZE * sizeof(double));
-    double *h_P = malloc(SIZE * SIZE * sizeof(double));
+    double *h_N = (double *) malloc(SIZE * SIZE * sizeof(double));
+    double *h_M = (double *) malloc(SIZE * SIZE * sizeof(double));
+    double *h_P = (double *) malloc(SIZE * SIZE * sizeof(double));
 
     long i, j, k;
     for(i = 0; i < SIZE * SIZE; i++) {
-        N[i] = 2.0;
-        M[i] = 2.0;
-        P[i] = 0.0;
+        h_N[i] = 2.0;
+        h_M[i] = 2.0;
+        h_P[i] = 0.0;
     }
 
     double *d_N;
