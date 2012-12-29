@@ -35,7 +35,7 @@ int main() {
     double *h_M = (double *) malloc(SIZE * SIZE * sizeof(double));
     double *h_P = (double *) malloc(SIZE * SIZE * sizeof(double));
 
-    long i, j, k;
+    long i;
     for(i = 0; i < SIZE * SIZE; i++) {
         h_N[i] = 2.0;
         h_M[i] = 2.0;
@@ -48,7 +48,7 @@ int main() {
 
     wbCheck(cudaMalloc((void **) &d_N, SIZE * SIZE * sizeof(double)));
     wbCheck(cudaMalloc((void **) &d_M, SIZE * SIZE * sizeof(double)));
-    wbCheck(cudaMalloc((void **) &d_P, SIZe * SIZE * sizeof(double)));
+    wbCheck(cudaMalloc((void **) &d_P, SIZE * SIZE * sizeof(double)));
 
     wbCheck(cudaMemcpy(d_N, h_N, SIZE * SIZE * sizeof(double), cudaMemcpyHostToDevice));
     wbCheck(cudaMemcpy(d_M, h_M, SIZE * SIZE * sizeof(double), cudaMemcpyHostToDevice));
