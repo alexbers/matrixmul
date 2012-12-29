@@ -75,7 +75,7 @@ int main() {
                        (double)(end.tv_usec - start.tv_usec) / 1000 / 1000;
     double time_spent = (double)(usec_diff);
 
-    printf("Multiplication finished, wallclock: %f sec\n", time_spent);
+    printf("Multiplication finished, wallclock: %f sec, %f\n", time_spent, h_P[0]);
 
     return 0;
 }
