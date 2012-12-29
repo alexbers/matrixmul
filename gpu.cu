@@ -59,6 +59,14 @@ int main() {
     gettimeofday(&start, NULL);
 
     matrixMultiply<<<dimGrid,dimBlock>>>(d_N, d_M, d_P, SIZE);
+
+    cudaError_t cudaResult = cudaGetLastError();
+    if (cudaResult != cudaSuccess) {
+        printf("Failed to call CUDA's kernel function: %s\n",
+            cudaGetErrorString(cudaResult));
+        return 1;
+    }
+
     cudaThreadSynchronize();
 
     gettimeofday(&end, NULL);
@@ -76,10 +84,6 @@ int main() {
     double time_spent = (double)(usec_diff);
 
     printf("Multiplication finished, wallclock: %f sec, %f\n", time_spent, h_P[0]);
-
-    wbCheck(cudaFree(d_N));
-    wbCheck(cudaFree(d_M));
-    wbCheck(cudaFree(d_P));
 
     return 0;
 }
