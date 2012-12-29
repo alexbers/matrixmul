@@ -77,5 +77,9 @@ int main() {
 
     printf("Multiplication finished, wallclock: %f sec, %f\n", time_spent, h_P[0]);
 
+    wbCheck(cudaFree(d_N));
+    wbCheck(cudaFree(d_M));
+    wbCheck(cudaFree(d_P));
+
     return 0;
 }
