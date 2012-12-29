@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-// 1.5GB
-#define SIZE 8192
+#define SIZE 2048
 
 
 int main() {
@@ -37,7 +36,7 @@ int main() {
 
 
     // time calculation
-    if(end.tv_usec < start.tv_usec) {
+    if(end.tv_sec < start.tv_sec) {
         printf("You are very unlucky, please, run me again\n");
         return 1;
     }
