@@ -1,4 +1,4 @@
-cpu:
-	gcc	cpu.c -o cpu
+cpu: cpu.c
+	gcc	cpu.c -O3 -o cpu
 
 all: cpu
