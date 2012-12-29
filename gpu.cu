@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-#define SIZE 2048
+#define SIZE 8192
 #define BLOCKSIZE 32
 
 #define wbCheck(stmt) do {                                 \
